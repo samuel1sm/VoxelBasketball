@@ -3,20 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// [RequireComponent(typeof(AnimationManager), typeof(InputManager))]
 public class PlayerActions : MonoBehaviour
 {
-
-    private InputManager _inputManager;
-    private bool _isDefending = false;
-    [SerializeField] private float ballHeight;
-    [SerializeField] private float ballSpeed;
-    [SerializeField] private Transform initialBallPosition;
     
+    public event Action<Transform> HasTheBall = delegate(Transform o) {  };
+    private InputManager _inputManager;
+    private bool _isAttacking = false;
+    
+
+    [SerializeField] private Transform initialBallPosition;
     [SerializeField] private Transform hoopPosition;
-    [SerializeField] private Transform ball;
+
+    private AnimationManager _animationManager;
     private void Awake()
     {
         _inputManager = GetComponent<InputManager>();
+        _animationManager =GetComponent<AnimationManager>();
+
     }
 
     // Start is called before the first frame update
@@ -30,14 +34,23 @@ public class PlayerActions : MonoBehaviour
         switch (obj)
         {
             case ButtonInputTypes.Started:
-            
-                break;
-            case ButtonInputTypes.Performed:
-                if (!_isDefending)
-                    Shoot();
+                if (_isAttacking)
+                {
+                    _animationManager.StartShootBallAnimation();
+                    // _isAttacking = false;
+                    StartCoroutine(ChangeToDefence());
+                }
                 else
+                {
+                    // _isAttacking = true;
+
                     Defend();
+                }
                 break;
+
+            case ButtonInputTypes.Performed:
+                break;
+
             case ButtonInputTypes.Canceled:
                 break;
 
@@ -49,32 +62,26 @@ public class PlayerActions : MonoBehaviour
         
     }
 
-    private void Shoot()
+    public void Shoot()
     {
-        StartCoroutine(ShootBall());
-    }
-    
-
-    IEnumerator ShootBall()
-    {
-        float animationTime = 0;
-
-        var initial = initialBallPosition.position;
-        while (true)
-        {
-            animationTime += Time.deltaTime;
-            animationTime = animationTime % ballSpeed;
-            
-            ball.position = MathParabola.Parabola(initial, hoopPosition.position, ballHeight,
-                animationTime / ballSpeed);
-            
-            yield return new WaitForSeconds(0f);
-            
-            if(animationTime >= ballSpeed) break;
-        }
         
-        print("saiu");
+        BallManager.Instance.StartShoot(initialBallPosition.position,hoopPosition.position);
+        // StartCoroutine(ShootBall());
     }
 
+    IEnumerator ChangeToDefence()
+    {
+        yield return new WaitForSeconds(0.4f);
+        _isAttacking = false;
+    }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Ball") && !_isAttacking)
+        {
+            HasTheBall(transform);
+            _isAttacking = true;
+            _animationManager.StartBouncing();
+        }
+    }
 }

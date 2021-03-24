@@ -28,7 +28,7 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""FirstAction"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Button"",
                     ""id"": ""681205b1-5ffc-43e1-b20f-1adf44d8714e"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
