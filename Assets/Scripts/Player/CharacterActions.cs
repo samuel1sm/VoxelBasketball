@@ -6,7 +6,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 // [RequireComponent(typeof(AnimationManager), typeof(InputManager))]
-public class PlayerActions : MonoBehaviour
+public class CharacterActions : MonoBehaviour
 {
     public event Action<Transform> HasTheBall = delegate(Transform o) { };
     private InputManager _inputManager;

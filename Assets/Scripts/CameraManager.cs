@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    [SerializeField] private PlayerActions[] players;
+    [SerializeField] private CharacterActions[] players;
     private BallManager _ballManager;
     private CinemachineVirtualCamera _camera;
     private Transform _lastPlayer;

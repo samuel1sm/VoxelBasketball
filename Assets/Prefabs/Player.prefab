@@ -299,7 +299,7 @@ MonoBehaviour:
   stamina2Lose: 0.1
   playerSpeed: 10
   turnSmoothTime: 0.15
-  gravity: 2
+  gravity: 0
 --- !u!114 &7935947658652504187
 MonoBehaviour:
   m_ObjectHideFlags: 0
