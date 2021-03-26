@@ -72,7 +72,7 @@ public class ChanceBar : MonoBehaviour
         StopCoroutine(_coroutine);
         var percentageDistance = Mathf.Abs(endedPercentage - _centerPercentage) * 2; 
         
-        print((1 - percentageDistance) * extraValues);
+        // print((1 - percentageDistance) * extraValues);
         return (1 - percentageDistance) * extraValues;
     }
 

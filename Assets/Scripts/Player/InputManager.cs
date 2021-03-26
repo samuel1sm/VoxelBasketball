@@ -44,7 +44,6 @@ public class InputManager : MonoBehaviour
 
     private void OnEnable()
     {
-
         _playerInput.Enable();
     }
 
@@ -53,15 +52,10 @@ public class InputManager : MonoBehaviour
         _playerInput.Disable();
     }
 
-    // Start is called before the first frame update
     public Vector2 GetPlayerMovement()
     {
         return _playerInput.Actions.Movement.ReadValue<Vector2>();
     }
 
-// Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 }

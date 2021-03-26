@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -18,7 +19,7 @@ public class PlayerActions : MonoBehaviour
 
     private AnimationManager _animationManager;
     private float chanceResult;
-    
+
     private void Awake()
     {
         _inputManager = GetComponent<InputManager>();
@@ -38,15 +39,15 @@ public class PlayerActions : MonoBehaviour
         {
             case ButtonInputTypes.Started:
                 if (_isAttacking)
-                {   
+                {
+                    _animationManager.LookAt(hoopPosition.position, AxisConstraint.Y);
                     _inputManager.MovementActivation(obj);
                     _characterStatus.StartChanceBar();
                 }
                 else
                 {
-                    // _isAttacking = true;
-
-                    Defend();
+                    _inputManager.MovementActivation(obj);
+                    _animationManager.StartFirstAction();
                 }
 
                 break;
@@ -61,25 +62,34 @@ public class PlayerActions : MonoBehaviour
 
                     chanceResult = _characterStatus.StopChanceBar(hoopDistance);
                     _animationManager.StartShootBallAnimation();
-                    
+
                     _characterStatus.UpdateStamina(-normalShootStaminaLost * CalculateDistancePlayerToHoop());
                     StartCoroutine(ChangeToDefence());
                     _inputManager.MovementActivation(obj);
                 }
 
+
                 break;
         }
     }
 
-    private void Defend()
-    {
-    }
 
     public void Shoot()
     {
-        bool scored = Random.Range(0f, 1f) <= chanceResult; 
+        bool scored = Random.Range(0f, 1f) <= chanceResult;
         BallManager.Instance.StartShoot(initialBallPosition.position, scored);
         // StartCoroutine(ShootBall());
+    }
+
+    public void Jump()
+    {
+        var originalPosition = transform.position;
+        
+        DOTween.Sequence()
+            .Append(transform.DOMove((originalPosition + transform.up), 0.3f).SetEase(Ease.Linear))
+            .Append(transform.DOMove(originalPosition, 0.3f)).SetEase(Ease.Linear)
+            .onComplete += () => _inputManager.MovementActivation(ButtonInputTypes.Canceled);
+
     }
 
     private float CalculateDistancePlayerToHoop()
@@ -93,6 +103,7 @@ public class PlayerActions : MonoBehaviour
     {
         yield return new WaitForSeconds(0.4f);
         _isAttacking = false;
+        _animationManager.UpdateStatus(_isAttacking);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -101,7 +112,9 @@ public class PlayerActions : MonoBehaviour
         {
             HasTheBall(transform);
             _isAttacking = true;
-            _animationManager.StartBouncing();
+            _animationManager.UpdateStatus(_isAttacking);
+
+            _animationManager.StartFirstAction();
         }
     }
 }

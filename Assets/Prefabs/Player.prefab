@@ -299,6 +299,7 @@ MonoBehaviour:
   stamina2Lose: 0.1
   playerSpeed: 10
   turnSmoothTime: 0.15
+  gravity: 2
 --- !u!114 &7935947658652504187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,8 +312,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2580487c12656894db6aaf6f5a67e9f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  staminaRegenerationCountdown: 1
-  passiveStaminaRegeneration: 2
+  staminaRegenerationCountdown: 0.1
+  passiveStaminaRegeneration: 0.2
   maxStamina: 100
   successChance: 0
 --- !u!114 &965554249
@@ -365,7 +366,6 @@ GameObject:
   - component: {fileID: 4402616180669725138}
   - component: {fileID: 4402616180669725143}
   - component: {fileID: 4402616180669725140}
-  - component: {fileID: 4402616180669725141}
   m_Layer: 0
   m_Name: LeftEye
   m_TagString: Untagged
@@ -436,19 +436,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4402616180669725141
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4402616180669725139}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4402616180748378763
 GameObject:
   m_ObjectHideFlags: 0
@@ -683,7 +670,6 @@ GameObject:
   - component: {fileID: 4402616181655702755}
   - component: {fileID: 4402616181655702756}
   - component: {fileID: 4402616181655702757}
-  - component: {fileID: 4402616181655702754}
   m_Layer: 0
   m_Name: Bandana
   m_TagString: Untagged
@@ -754,19 +740,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4402616181655702754
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4402616181655702752}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4402616182029113155
 GameObject:
   m_ObjectHideFlags: 0
@@ -778,7 +751,6 @@ GameObject:
   - component: {fileID: 4402616182029113154}
   - component: {fileID: 4402616182029113159}
   - component: {fileID: 4402616182029113156}
-  - component: {fileID: 4402616182029113157}
   m_Layer: 0
   m_Name: RightEye
   m_TagString: Untagged
@@ -849,19 +821,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4402616182029113157
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4402616182029113155}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &4997481432445494509
 PrefabInstance:
   m_ObjectHideFlags: 0
