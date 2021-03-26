@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
     {
         var input = _inputManager.GetPlayerMovement();
         var direction = Vector22Vector3(input).normalized ;
-
+        
 
         if (direction.magnitude >= 0.1f)
         {

@@ -141,4 +141,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ballSpeed: 1
   jumpHeight: 3
-  ballRotation: {x: 360, y: 0, z: 0}
+  ballRotation: 360
+  waypointInfosList:
+  - pathPoints:
+    - {fileID: 0}
+    type: 2
+    isAnErrorPath: 0

@@ -2,12 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 // [RequireComponent(typeof(AnimationManager), typeof(InputManager))]
 public class PlayerActions : MonoBehaviour
 {
-
-
     public event Action<Transform> HasTheBall = delegate(Transform o) { };
     private InputManager _inputManager;
     private bool _isAttacking = false;
@@ -18,13 +17,13 @@ public class PlayerActions : MonoBehaviour
     private CharacterStatus _characterStatus;
 
     private AnimationManager _animationManager;
-
+    private float chanceResult;
+    
     private void Awake()
     {
         _inputManager = GetComponent<InputManager>();
         _animationManager = GetComponent<AnimationManager>();
         _characterStatus = GetComponent<CharacterStatus>();
-
     }
 
     // Start is called before the first frame update
@@ -39,12 +38,9 @@ public class PlayerActions : MonoBehaviour
         {
             case ButtonInputTypes.Started:
                 if (_isAttacking)
-                {
-                    _animationManager.StartShootBallAnimation();
-                    _characterStatus.UpdateStamina(-normalShootStaminaLost * CalculateDistancePlayerToHoop());
-                    CalculateDistancePlayerToHoop();
-                    // _isAttacking = false;
-                    StartCoroutine(ChangeToDefence());
+                {   
+                    _inputManager.MovementActivation(obj);
+                    _characterStatus.StartChanceBar();
                 }
                 else
                 {
@@ -59,28 +55,38 @@ public class PlayerActions : MonoBehaviour
                 break;
 
             case ButtonInputTypes.Canceled:
-                break;
+                if (_isAttacking)
+                {
+                    var hoopDistance = CalculateDistancePlayerToHoop();
 
+                    chanceResult = _characterStatus.StopChanceBar(hoopDistance);
+                    _animationManager.StartShootBallAnimation();
+                    
+                    _characterStatus.UpdateStamina(-normalShootStaminaLost * CalculateDistancePlayerToHoop());
+                    StartCoroutine(ChangeToDefence());
+                    _inputManager.MovementActivation(obj);
+                }
+
+                break;
         }
     }
 
     private void Defend()
     {
-
     }
 
     public void Shoot()
     {
-
-        BallManager.Instance.StartShoot(initialBallPosition.position, hoopPosition.position);
+        bool scored = Random.Range(0f, 1f) <= chanceResult; 
+        BallManager.Instance.StartShoot(initialBallPosition.position, scored);
         // StartCoroutine(ShootBall());
     }
 
     private float CalculateDistancePlayerToHoop()
     {
-       var result =  Vector3.Distance(hoopPosition.position, initialBallPosition.position);
-       result = Mathf.Clamp(result, 6, 24);
-       return result/24;
+        var result = Vector3.Distance(hoopPosition.position, initialBallPosition.position);
+        result = Mathf.Clamp(result, 6, 24);
+        return 1 - result / 24;
     }
 
     IEnumerator ChangeToDefence()

@@ -8,8 +8,11 @@ public class CharacterStatus : MonoBehaviour
     [SerializeField] private float staminaRegenerationCountdown = 0.8f;
     [SerializeField] private float passiveStaminaRegeneration = 2f;
     [SerializeField] private float maxStamina = 100f;
-    [SerializeField] private float successChance;
+    [SerializeField] private float successChance = 100f;
     public event Action<float> StaminaUpdated = delegate(float f) {  };
+    public event Action<float> StartChanceMarker = delegate {  };
+    public event Func<float,float> StopChanceMarker; 
+    
     private float _actualStamina;
     
     private void Awake()
@@ -22,9 +25,23 @@ public class CharacterStatus : MonoBehaviour
         StartCoroutine(StaminaRegen());
     }
 
-    private void CalculateChanceOfSuccess()
+    private float CalculateChanceOfSuccess()
     {
-        
+
+        return successChance;
+    }
+
+    public void StartChanceBar()
+    {
+        StartChanceMarker( CalculateChanceOfSuccess());
+    }
+    
+    public float StopChanceBar(float hoopDistance)
+    {
+        var extraValues = hoopDistance * _actualStamina / maxStamina;
+        var result = StopChanceMarker(extraValues);
+        // print(result);
+        return result;
     }
     
 
@@ -45,3 +62,4 @@ public class CharacterStatus : MonoBehaviour
         }
     }
 }
+

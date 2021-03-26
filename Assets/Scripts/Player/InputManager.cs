@@ -24,12 +24,27 @@ public class InputManager : MonoBehaviour
         _playerInput.Actions.FirstAction.started += _ => FirstActionPressed(ButtonInputTypes.Started);
         _playerInput.Actions.FirstAction.performed += _ => FirstActionPressed(ButtonInputTypes.Performed);
         _playerInput.Actions.FirstAction.canceled += _ => FirstActionPressed(ButtonInputTypes.Canceled);
-
         
+        // _playerInput.Actions.FirstAction.started += _ => MovementActivation(ButtonInputTypes.Started);
+        // _playerInput.Actions.FirstAction.canceled += _ => MovementActivation(ButtonInputTypes.Canceled);
+
+    }
+
+    public void MovementActivation(ButtonInputTypes types)
+    {
+        if (types == ButtonInputTypes.Started)
+        {
+            _playerInput.Actions.Movement.Disable();
+        }
+        else
+        {
+            _playerInput.Actions.Movement.Enable();
+        }
     }
 
     private void OnEnable()
     {
+
         _playerInput.Enable();
     }
 
