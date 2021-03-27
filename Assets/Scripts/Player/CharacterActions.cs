@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using Utils;
 using Random = UnityEngine.Random;
 
 // [RequireComponent(typeof(AnimationManager), typeof(InputManager))]
 public class CharacterActions : MonoBehaviour
 {
     public event Action<Transform> HasTheBall = delegate(Transform o) { };
-    private InputManager _inputManager;
     private bool _isAttacking = false;
 
     [SerializeField] private float normalShootStaminaLost = 20f;
@@ -17,12 +17,13 @@ public class CharacterActions : MonoBehaviour
     [SerializeField] private Transform hoopPosition;
     private CharacterStatus _characterStatus;
 
+    private CharacterControls _characterControls;
     private AnimationManager _animationManager;
     private float chanceResult;
 
     private void Awake()
     {
-        _inputManager = GetComponent<InputManager>();
+        _characterControls = GetComponent<CharacterControls>();
         _animationManager = GetComponent<AnimationManager>();
         _characterStatus = GetComponent<CharacterStatus>();
     }
@@ -30,7 +31,37 @@ public class CharacterActions : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _inputManager.FirstActionPressed += FirstActionHandle;
+        _characterControls.FirstActionPressed += FirstActionHandle;
+        _characterControls.SecondActionPressed += SecondActionHandle;
+        _animationManager.OnAnimationEnd += HandleAnimationEnd;
+    }
+
+    private void HandleAnimationEnd(AnimationTypes obj)
+    {
+        switch (obj)
+        {
+            case AnimationTypes.Jump:
+                _characterControls.MovementActivation(ButtonInputTypes.Canceled);
+                break;
+            case AnimationTypes.Charge:
+                _characterControls.MovementActivation(ButtonInputTypes.Canceled);
+                break;
+            case AnimationTypes.Shoot:
+                bool scored = Random.Range(0f, 1f) <= chanceResult;
+                BallManager.Instance.StartShoot(initialBallPosition.position, scored);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(obj), obj, null);
+        }
+    }
+
+    private void SecondActionHandle(ButtonInputTypes obj)
+    {
+        if (obj != ButtonInputTypes.Started) return;
+        _characterControls.MovementActivation(obj);
+
+        _animationManager.StartSecondAction();
+        
     }
 
     private void FirstActionHandle(ButtonInputTypes obj)
@@ -38,15 +69,15 @@ public class CharacterActions : MonoBehaviour
         switch (obj)
         {
             case ButtonInputTypes.Started:
+                _characterControls.MovementActivation(obj);
+
                 if (_isAttacking)
                 {
                     _animationManager.LookAt(hoopPosition.position, AxisConstraint.Y);
-                    _inputManager.MovementActivation(obj);
                     _characterStatus.StartChanceBar();
                 }
                 else
                 {
-                    _inputManager.MovementActivation(obj);
                     _animationManager.StartFirstAction();
                 }
 
@@ -65,32 +96,14 @@ public class CharacterActions : MonoBehaviour
 
                     _characterStatus.UpdateStamina(-normalShootStaminaLost * CalculateDistancePlayerToHoop());
                     StartCoroutine(ChangeToDefence());
-                    _inputManager.MovementActivation(obj);
+                    _characterControls.MovementActivation(obj);
                 }
 
 
                 break;
         }
     }
-
-
-    public void Shoot()
-    {
-        bool scored = Random.Range(0f, 1f) <= chanceResult;
-        BallManager.Instance.StartShoot(initialBallPosition.position, scored);
-        // StartCoroutine(ShootBall());
-    }
-
-    public void Jump()
-    {
-        var originalPosition = transform.position;
-        
-        DOTween.Sequence()
-            .Append(transform.DOMove((originalPosition + transform.up), 0.3f).SetEase(Ease.Linear))
-            .Append(transform.DOMove(originalPosition, 0.3f)).SetEase(Ease.Linear)
-            .onComplete += () => _inputManager.MovementActivation(ButtonInputTypes.Canceled);
-
-    }
+    
 
     private float CalculateDistancePlayerToHoop()
     {

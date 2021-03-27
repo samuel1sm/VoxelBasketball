@@ -1,19 +1,13 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using Utils;
 
-public enum ButtonInputTypes{
-    Started, Performed, Canceled
-}
 
-public class InputManager : MonoBehaviour
+public class InputManager : CharacterControls
 {
     private PlayerInputs _playerInput;
-    
-    public event Action<ButtonInputTypes> FirstActionPressed = delegate(ButtonInputTypes types) {  }; 
 
+    private bool IsAttacking = false;
+    
     private void Awake()
     {
         _playerInput = new PlayerInputs();
@@ -21,25 +15,19 @@ public class InputManager : MonoBehaviour
 
     private void Start()
     {
-        _playerInput.Actions.FirstAction.started += _ => FirstActionPressed(ButtonInputTypes.Started);
-        _playerInput.Actions.FirstAction.performed += _ => FirstActionPressed(ButtonInputTypes.Performed);
-        _playerInput.Actions.FirstAction.canceled += _ => FirstActionPressed(ButtonInputTypes.Canceled);
-        
-        // _playerInput.Actions.FirstAction.started += _ => MovementActivation(ButtonInputTypes.Started);
-        // _playerInput.Actions.FirstAction.canceled += _ => MovementActivation(ButtonInputTypes.Canceled);
+        _playerInput.Actions.FirstAction.started += _ => OnFirstActionPressed(ButtonInputTypes.Started);
+        _playerInput.Actions.FirstAction.performed += _ => OnFirstActionPressed(ButtonInputTypes.Performed);
+        _playerInput.Actions.FirstAction.canceled += _ => OnFirstActionPressed(ButtonInputTypes.Canceled);
+
+        _playerInput.Actions.SecondAction.started += _ => OnSecondActionPressed(ButtonInputTypes.Started);
+        _playerInput.Actions.SecondAction.performed += _ => OnSecondActionPressed(ButtonInputTypes.Performed);
+        _playerInput.Actions.SecondAction.canceled += _ => OnSecondActionPressed(ButtonInputTypes.Canceled);
 
     }
 
-    public void MovementActivation(ButtonInputTypes types)
+    public override void MovementActivation(ButtonInputTypes types)
     {
-        if (types == ButtonInputTypes.Started)
-        {
-            _playerInput.Actions.Movement.Disable();
-        }
-        else
-        {
-            _playerInput.Actions.Movement.Enable();
-        }
+        IsAttacking = types == ButtonInputTypes.Started;
     }
 
     private void OnEnable()
@@ -52,10 +40,16 @@ public class InputManager : MonoBehaviour
         _playerInput.Disable();
     }
 
-    public Vector2 GetPlayerMovement()
+    public override Vector3 GetMovement()
     {
-        return _playerInput.Actions.Movement.ReadValue<Vector2>();
+        if (IsAttacking)
+            return Vector3.zero;
+        
+        return Vector22Vector3(_playerInput.Actions.Movement.ReadValue<Vector2>());
     }
 
-
+    private Vector3 Vector22Vector3(Vector2 vector2)
+    {
+        return new Vector3(vector2.x, 0, vector2.y);
+    }
 }

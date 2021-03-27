@@ -19,10 +19,10 @@ public class CameraManager : MonoBehaviour
         {
             player.HasTheBall += UpdateCameraToCharacter;
         }
-        
-        _auxPivot = new GameObject();
-        _auxPivot.name = "pivot";
+
+        _auxPivot = new GameObject {name = "pivot"};
         _ballManager.StateUpdated += UpdateCameraToBall;
+        
     }
 
     private void UpdateCameraToBall(BallState obj)
