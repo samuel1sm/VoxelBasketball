@@ -16,7 +16,7 @@ public enum BallState
 public class BallManager : MonoBehaviour
 {
     public static BallState ActualState = BallState.ToBeCollect;
-    public event Action<BallState> StateUpdated = delegate(BallState shooted) { };
+    public event Action<Transform> OnStateUpdated = delegate(Transform postion) { };
 
     public static BallManager Instance;
     [SerializeField] private float ballSpeed = 0.5f;
@@ -40,7 +40,7 @@ public class BallManager : MonoBehaviour
 
     public void StartShoot(Vector3 initialPosition, bool scored)
     {
-        StateChanged(BallState.WasShoot, true);
+        StateChanged(BallState.WasShoot, transform, true);
 
         transform.position = initialPosition;
 
@@ -61,22 +61,22 @@ public class BallManager : MonoBehaviour
         if (scored)
         {
             transform.DOJump(position, jumpHeight, 1, ballSpeed)
-                .onComplete += () => StateChanged(BallState.ToBeCollect, false);
+                .onComplete += () => StateChanged(BallState.ToBeCollect, transform, false);
         }
         else
         {
-            transform.DOMove(errorPosition.position, ballSpeed )
-                .onComplete += () => StateChanged(BallState.ToBeCollect, false);
+            transform.DOMove(errorPosition.position, ballSpeed)
+                .onComplete += () => StateChanged(BallState.ToBeCollect, transform, false);
         }
 
         transform.DORotate(direction * ballRotation, ballSpeed, RotateMode.LocalAxisAdd);
     }
 
-    private void StateChanged(BallState state, bool isKinematic)
+    private void StateChanged(BallState state, Transform owner, bool isKinematic)
     {
         ActualState = state;
         _rigidbody.isKinematic = isKinematic;
-        StateUpdated(state);
+        OnStateUpdated(owner);
     }
 
 
@@ -86,7 +86,7 @@ public class BallManager : MonoBehaviour
         if (other.CompareTag("Player") && ActualState == BallState.ToBeCollect)
         {
             transform.position = _outMapPosition;
-            StateChanged(BallState.WasCollected, true);
+            StateChanged(BallState.WasCollected, other.transform, true);
         }
     }
 }

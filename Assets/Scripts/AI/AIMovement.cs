@@ -1,3 +1,4 @@
+using System;
 using AI;
 using UnityEngine;
 using UnityEngine.AI;
@@ -14,14 +15,32 @@ public class AIMovement : GenericMovement
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _aiBrain = GetComponent<AIBrain>();
         characterStatus = GetComponent<CharacterStatus>();
-
+        distanceToTarget = _navMeshAgent.stoppingDistance;
+        characterSpeed = _navMeshAgent.speed;
         _navMeshAgent.stoppingDistance = 0;
     }
 
     private void Start()
     {
-        _aiBrain.OnChansigBallUpdated += b => _navMeshAgent.stoppingDistance = b ? 0 : distanceToTarget;
+        _aiBrain.OnModeUpdated += UpdateMovement;
     }
+
+    private void UpdateMovement(AIMode obj)
+    {
+        switch (obj)
+        {
+            case AIMode.Defending:
+                _navMeshAgent.stoppingDistance = distanceToTarget;
+                break;
+            case AIMode.Chasing:
+                _navMeshAgent.stoppingDistance = 0;
+                break;
+            case AIMode.Lurking:
+                break;
+ 
+        }
+    }
+
 
     private void FixedUpdate()
     {

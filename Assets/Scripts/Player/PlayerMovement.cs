@@ -22,14 +22,10 @@ public class PlayerMovement : GenericMovement
 
     private void Start()
     {
-        _characterControls.FirstActionPressed += ResetVelocity;
+        // _characterControls.FirstActionPressed += ResetVelocity;
     }
 
-    private void ResetVelocity(ButtonInputTypes obj)
-    {
-        if (obj == ButtonInputTypes.Canceled)
-            _velocityY = 0;
-    }
+   
 
 
     private void FixedUpdate()
@@ -38,7 +34,7 @@ public class PlayerMovement : GenericMovement
         var direction = input.normalized;
 
 
-        Vector3 velocity = direction * characterSpeed + Vector3.down * _velocityY;
+        Vector3 velocity = direction * characterSpeed;
 
 
         if (direction.magnitude >= 0.1f)

@@ -18,30 +18,44 @@ public class CameraManager : MonoBehaviour
         characters = FindObjectsOfType<CharacterStatus>();
         _camera = GetComponent<CinemachineVirtualCamera>();
         _ballManager = BallManager.Instance;
-        foreach (var player in characters)
-        {
-            player.OnCatchTheBall += UpdateCameraToCharacter;
-        }
-
         _auxPivot = new GameObject {name = "pivot"};
-        _ballManager.StateUpdated += UpdateCameraToBall;
+        _ballManager.OnStateUpdated += UpdateCameraToBall;
     }
 
-    private void UpdateCameraToBall(BallState obj)
+    private void UpdateCameraToBall(Transform obj)
     {
-        var ballTransform = _ballManager.transform;
-        switch (obj)
+        // var ballTransform = _ballManager.transform;
+        if (BallManager.ActualState == BallState.WasShoot)
         {
-            case BallState.WasShoot:
-                _camera.Follow = ballTransform;
-                _camera.LookAt = ballTransform;
-                break;
-            case BallState.ToBeCollect:
+            print("bola");
+
+            _camera.Follow = obj;
+            _camera.LookAt = obj;
+        }
+        else if (BallManager.ActualState == BallState.ToBeCollect)
+        {
+            print("pivo");
+
+            StartCoroutine(UpdatePivot(obj));
+            _camera.Follow = _auxPivot.transform;
+            _camera.LookAt = _auxPivot.transform;
+        }
+        else
+        {
+            var a = obj.GetComponent<CharacterStatus>();
+            if (a.isAI)
             {
-                StartCoroutine(UpdatePivot(ballTransform));
+                print($"{a.gameObject.name}");
+                StartCoroutine(UpdatePivot(obj));
                 _camera.Follow = _auxPivot.transform;
                 _camera.LookAt = _auxPivot.transform;
-                break;
+            }
+            else
+            {
+                print("player");
+
+                _camera.Follow = obj;
+                _camera.LookAt = obj;
             }
         }
     }
@@ -54,22 +68,5 @@ public class CameraManager : MonoBehaviour
             var position = actualPlayer.position;
             _auxPivot.transform.position = (objectToLook.position - position) / 2 + position;
         }
-    }
-
-    private void UpdateCameraToCharacter(CharacterStatus obj)
-    {
-        if (obj.isAI)
-        {
-            StartCoroutine(UpdatePivot(obj.transform));
-            _camera.Follow = _auxPivot.transform;
-            _camera.LookAt = _auxPivot.transform;
-            return;
-        }
-
-        StopCoroutine("UpdatePivot");
-        var objTransform = obj.transform;
-        actualPlayer = objTransform;
-        _camera.Follow = objTransform;
-        _camera.LookAt = objTransform;
     }
 }

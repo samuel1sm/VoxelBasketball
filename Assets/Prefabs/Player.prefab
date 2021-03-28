@@ -195,6 +195,7 @@ GameObject:
   - component: {fileID: 965554249}
   - component: {fileID: 965554251}
   - component: {fileID: 4717606337682768548}
+  - component: {fileID: 1976960630}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -301,6 +302,11 @@ MonoBehaviour:
   passiveStaminaRegeneration: 0.2
   maxStamina: 100
   successChance: 0
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 128
+  isAI: 0
+  attackRadius: 1.5
   isTeamOne: 0
 --- !u!114 &965554249
 MonoBehaviour:
@@ -329,10 +335,6 @@ MonoBehaviour:
   normalShootStaminaLost: 20
   initialBallPosition: {fileID: 721920852515565177}
   hoopPosition: {fileID: 0}
-  attackRadius: 1.2
-  _hitMask:
-    serializedVersion: 2
-    m_Bits: 128
 --- !u!114 &4717606337682768548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,6 +347,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7b1ba1cefdd98c469ad71c0209132cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!208 &1976960630
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4402616180620813215}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &4402616180669725139
 GameObject:
   m_ObjectHideFlags: 0

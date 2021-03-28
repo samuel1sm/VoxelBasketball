@@ -79,9 +79,11 @@ public class CharacterActions : MonoBehaviour
 
         if (_characterStatus.GetHasTheBall())
         {
+            //todo passe
         }
         else
         {
+
             hasAttacked = !hasAttacked;
             _characterControls.MovementActivation(obj);
 

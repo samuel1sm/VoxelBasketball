@@ -10,31 +10,41 @@ public class AIManager : MonoBehaviour
 {
     [SerializeField] private CharacterStatus[] playersStatus;
     [SerializeField] private AIBrain[] aiBrains;
-    private BallManager _ballManager;
     private Transform _playerWithBall;
-    
+    private BallManager _manager;
+
     private void Awake()
     {
         aiBrains = GetComponentsInChildren<AIBrain>();
-        _ballManager = BallManager.Instance;
-      
-        
+        _manager = BallManager.Instance;
     }
 
     private void Start()
     {
-        foreach (var player in playersStatus)
+        _manager.OnStateUpdated += HandleBallUpdate;
+    }
+
+    private void HandleBallUpdate(Transform obj)
+    {
+        if (BallManager.ActualState == BallState.ToBeCollect)
         {
-            player.OnCatchTheBall += HandlePlayerWithBall;
+            if (aiBrains.Length == 1)
+            {
+                aiBrains[0].SetMovement(_playerWithBall.transform);
+                aiBrains[0].UpdateAIMode(AIMode.Chasing);
+            }
+        }
+        else if (BallManager.ActualState == BallState.WasCollected)
+        {
+            var status = obj.GetComponentsInParent<CharacterStatus>()[0];
+            if (status.isAI) return;
+
+            _playerWithBall = obj.transform;
+            if (aiBrains.Length == 1)
+            {
+                aiBrains[0].SetMovement(_playerWithBall.transform);
+                aiBrains[0].UpdateAIMode(AIMode.Defending);
+            }
         }
     }
-
-    private void HandlePlayerWithBall(CharacterStatus obj)
-    {
-        _playerWithBall = obj.transform;
-        if(aiBrains.Length == 1)
-            aiBrains[0].SetMovement(_playerWithBall.transform);
-    }
-
-  
 }
