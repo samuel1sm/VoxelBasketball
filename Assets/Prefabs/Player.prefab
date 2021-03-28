@@ -23,7 +23,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1220121005658260015}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.008726558, z: 0, w: 0.999962}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 4402616180574769339}
   m_Father: {fileID: 4402616180620813203}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 1, z: 0}
 --- !u!1 &3657359233314969732
 GameObject:
   m_ObjectHideFlags: 0
@@ -76,7 +76,6 @@ GameObject:
   - component: {fileID: 4402616180405805874}
   - component: {fileID: 4402616180405805879}
   - component: {fileID: 4402616180405805876}
-  - component: {fileID: 4402616180405805877}
   m_Layer: 7
   m_Name: LeftHand
   m_TagString: Player
@@ -147,19 +146,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4402616180405805877
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4402616180405805875}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4402616180574769336
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,6 +301,7 @@ MonoBehaviour:
   passiveStaminaRegeneration: 0.2
   maxStamina: 100
   successChance: 0
+  isTeamOne: 0
 --- !u!114 &965554249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,6 +329,10 @@ MonoBehaviour:
   normalShootStaminaLost: 20
   initialBallPosition: {fileID: 721920852515565177}
   hoopPosition: {fileID: 0}
+  attackRadius: 1.2
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!114 &4717606337682768548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -446,7 +437,6 @@ GameObject:
   - component: {fileID: 4402616180748378762}
   - component: {fileID: 4402616180748378767}
   - component: {fileID: 4402616180748378764}
-  - component: {fileID: 4402616180748378765}
   m_Layer: 7
   m_Name: RightHand
   m_TagString: Player
@@ -518,19 +508,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4402616180748378765
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4402616180748378763}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4402616181081716923
 GameObject:
   m_ObjectHideFlags: 0
@@ -574,7 +551,6 @@ GameObject:
   - component: {fileID: 4402616181290569090}
   - component: {fileID: 7729433003831735407}
   - component: {fileID: 2577106415265581843}
-  - component: {fileID: 2771805151127341044}
   m_Layer: 7
   m_Name: Skeleton
   m_TagString: Player
@@ -645,19 +621,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &2771805151127341044
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4402616181290569091}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4402616181655702752
 GameObject:
   m_ObjectHideFlags: 0

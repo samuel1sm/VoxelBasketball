@@ -65,9 +65,8 @@ public class AnimationManager : MonoBehaviour
     {
         var originalPosition = transform.position;
         DOTween.Sequence()
-            .Append(transform.DOMove(transform.position + transform.forward * 2, 0.9f).SetEase(Ease.Linear))
-            .Append(transform.DOMove(originalPosition, 0.11f).SetEase(Ease.Linear))
-        
+            .Append(transform.DOMove(transform.position + transform.forward * 3, 0.18f).SetEase(Ease.Linear))
+            .Append(transform.DOMove(originalPosition, 0.3f).SetEase(Ease.InQuint))
             .onComplete += () => OnAnimationEnd(AnimationTypes.Charge);
     }
 

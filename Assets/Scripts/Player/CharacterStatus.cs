@@ -9,6 +9,13 @@ public class CharacterStatus : MonoBehaviour
     [SerializeField] private float passiveStaminaRegeneration = 2f;
     [SerializeField] private float maxStamina = 100f;
     [SerializeField] private float successChance = 100f;
+    
+
+    private bool _isAttacking;
+
+    public bool isTeamOne;
+    public event Action<Transform> OnCatchTheBall = delegate(Transform f) {  };
+
     public event Action<float> StaminaUpdated = delegate(float f) {  };
     public event Action<float> StartChanceMarker = delegate {  };
     public event Func<float,float> StopChanceMarker; 
@@ -60,6 +67,30 @@ public class CharacterStatus : MonoBehaviour
             yield return new WaitForSeconds(staminaRegenerationCountdown);
             UpdateStamina(passiveStaminaRegeneration);
         }
+    }
+
+    public bool GetIsAttacking()
+    {
+        return _isAttacking;
+    }
+    
+    public void UpdateIsAttacking()
+    {
+        _isAttacking = !_isAttacking;
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Ball") && !_isAttacking)
+        {
+            TookTheBall();
+        }
+    }
+
+    public void TookTheBall()
+    {
+        _isAttacking = true;
+        OnCatchTheBall(transform);
     }
 }
 

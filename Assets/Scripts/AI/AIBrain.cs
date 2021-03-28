@@ -11,19 +11,19 @@ namespace AI
         [SerializeField] private Transform hoop;
         private bool IsChansingTheBall { get; set; } = true;
         private Transform _previousPosition;
-        private CharacterActions _characterActions;
+        private CharacterStatus _characterStatus;
         private BallManager _ballManager;
         
         public event Action<bool> OnChansigBallUpdated = delegate(bool b) {  };
         private void Awake()
         {
             _ballManager = BallManager.Instance;
-            _characterActions = GetComponent<CharacterActions>();
+            _characterStatus = GetComponent<CharacterStatus>();
         }
 
         private void Start()
         {
-            _characterActions.HasTheBall += IsAttacking;
+            _characterStatus.OnCatchTheBall += IsAttacking;
             _ballManager.StateUpdated += HandleBallUpdate;
             positionToGo = _ballManager.transform;
 

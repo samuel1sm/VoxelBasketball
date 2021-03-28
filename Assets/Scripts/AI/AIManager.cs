@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 
 public class AIManager : MonoBehaviour
 {
-    [SerializeField] private CharacterActions[] playersActions;
+    [SerializeField] private CharacterStatus[] playersStatus;
     [SerializeField] private AIBrain[] aiBrains;
     private BallManager _ballManager;
     private Transform _playerWithBall;
@@ -23,16 +23,15 @@ public class AIManager : MonoBehaviour
 
     private void Start()
     {
-        foreach (var player in playersActions)
+        foreach (var player in playersStatus)
         {
-            player.HasTheBall += HandlePlayerWithBall;
+            player.OnCatchTheBall += HandlePlayerWithBall;
         }
     }
 
     private void HandlePlayerWithBall(Transform obj)
     {
         _playerWithBall = obj;
-        print(obj.gameObject.name);
         if(aiBrains.Length == 1)
             aiBrains[0].SetMovement(_playerWithBall.transform);
     }

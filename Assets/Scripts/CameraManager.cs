@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    [SerializeField] private CharacterActions[] players;
+    [SerializeField] private CharacterStatus[] players;
     private BallManager _ballManager;
     private CinemachineVirtualCamera _camera;
     private Transform _lastPlayer;
@@ -17,7 +17,7 @@ public class CameraManager : MonoBehaviour
         _ballManager = BallManager.Instance;
         foreach (var player in players)
         {
-            player.HasTheBall += UpdateCameraToCharacter;
+            player.OnCatchTheBall += UpdateCameraToCharacter;
         }
 
         _auxPivot = new GameObject {name = "pivot"};
