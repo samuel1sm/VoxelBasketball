@@ -14,14 +14,13 @@ public class CharacterActions : MonoBehaviour
     [SerializeField] private float normalShootStaminaLost = 20f;
     [SerializeField] private Transform initialBallPosition;
     [SerializeField] private Transform hoopPosition;
-    [SerializeField] private float attackRadius = 1.5f;
     private CharacterStatus _characterStatus;
-    [SerializeField] private LayerMask _hitMask;
 
     private CharacterControls _characterControls;
     private AnimationManager _animationManager;
     private float chanceResult;
     private bool hasAttacked = false;
+
     private void Awake()
     {
         _characterControls = GetComponent<CharacterControls>();
@@ -35,16 +34,23 @@ public class CharacterActions : MonoBehaviour
     {
         _characterControls.FirstActionPressed += FirstActionHandle;
         _characterControls.SecondActionPressed += SecondActionHandle;
+        _characterStatus.OnBallStollen += LostTheBall;
         _characterStatus.OnCatchTheBall += HasTheBall;
+
         _animationManager.OnAnimationEnd += HandleAnimationEnd;
-        
     }
 
-    private void HasTheBall(Transform obj)
+    private void HasTheBall(CharacterStatus obj)
     {
         _animationManager.UpdateStatus(true);
         _animationManager.StartFirstAction();
     }
+
+    private void LostTheBall()
+    {
+        _animationManager.LoseTheBall();
+    }
+
 
     private void HandleAnimationEnd(AnimationTypes obj)
     {
@@ -70,24 +76,19 @@ public class CharacterActions : MonoBehaviour
     private void SecondActionHandle(ButtonInputTypes obj)
     {
         if (obj != ButtonInputTypes.Started) return;
-        hasAttacked = !hasAttacked;
-        _characterControls.MovementActivation(obj);
 
-        _animationManager.StartSecondAction();
-        
-        // StopCoroutine(nameof(CASTTEST));
-        // StartCoroutine(nameof(CASTTEST));
+        if (_characterStatus.GetHasTheBall())
+        {
+        }
+        else
+        {
+            hasAttacked = !hasAttacked;
+            _characterControls.MovementActivation(obj);
 
+            _animationManager.StartSecondAction();
+        }
     }
 
-    // IEnumerator CASTTEST()
-    // {
-    //     while(true)
-    //     {
-    //         yield return new WaitForSeconds(0);
-    //         CastAttack();
-    //     }
-    // }
 
     private void FirstActionHandle(ButtonInputTypes obj)
     {
@@ -96,7 +97,7 @@ public class CharacterActions : MonoBehaviour
             case ButtonInputTypes.Started:
                 _characterControls.MovementActivation(obj);
 
-                if (_characterStatus.GetIsAttacking())
+                if (_characterStatus.GetHasTheBall())
                 {
                     _animationManager.LookAt(hoopPosition.position, AxisConstraint.Y);
                     _characterStatus.StartChanceBar();
@@ -112,7 +113,7 @@ public class CharacterActions : MonoBehaviour
                 break;
 
             case ButtonInputTypes.Canceled:
-                if (_characterStatus.GetIsAttacking())
+                if (_characterStatus.GetHasTheBall())
                 {
                     var hoopDistance = CalculateDistancePlayerToHoop();
 
@@ -128,7 +129,7 @@ public class CharacterActions : MonoBehaviour
                 break;
         }
     }
-    
+
 
     private float CalculateDistancePlayerToHoop()
     {
@@ -143,37 +144,5 @@ public class CharacterActions : MonoBehaviour
 
         _characterStatus.UpdateIsAttacking();
         _animationManager.UpdateStatus(false);
-    }
-
-    public void CastAttack()
-    {
-        RaycastHit[] results = new RaycastHit[4];
-        var size = Physics.SphereCastNonAlloc(transform.position, attackRadius, transform.forward, 
-            results, 0, _hitMask);
-        Debug.DrawRay(transform.position, transform.up *2 , Color.blue, 2);
-        if (size > 1)
-        {   
-            print(size);
-            for (int i = 0; i < size ; i++)
-            {
-                print(results[i].transform.gameObject.name);
-                var status = results[i].transform.GetComponent<CharacterStatus>();
-                if (_characterStatus.isTeamOne == status.isTeamOne) continue;
-                
-                if (status.GetIsAttacking())
-                {
-                    _characterStatus.TookTheBall();
-                    
-                }
-            }
-        }
-    }
-
-
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRadius);
     }
 }

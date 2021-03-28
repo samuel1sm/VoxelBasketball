@@ -29,9 +29,9 @@ public class AIManager : MonoBehaviour
         }
     }
 
-    private void HandlePlayerWithBall(Transform obj)
+    private void HandlePlayerWithBall(CharacterStatus obj)
     {
-        _playerWithBall = obj;
+        _playerWithBall = obj.transform;
         if(aiBrains.Length == 1)
             aiBrains[0].SetMovement(_playerWithBall.transform);
     }

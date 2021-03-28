@@ -3,42 +3,42 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CameraManager : MonoBehaviour
 {
-    [SerializeField] private CharacterStatus[] players;
-    private BallManager _ballManager;
+    [SerializeField] private CharacterStatus[] characters;
+    [SerializeField] private Transform actualPlayer;
     private CinemachineVirtualCamera _camera;
-    private Transform _lastPlayer;
+    private BallManager _ballManager;
     private GameObject _auxPivot;
+
     private void Awake()
     {
+        characters = FindObjectsOfType<CharacterStatus>();
         _camera = GetComponent<CinemachineVirtualCamera>();
         _ballManager = BallManager.Instance;
-        foreach (var player in players)
+        foreach (var player in characters)
         {
             player.OnCatchTheBall += UpdateCameraToCharacter;
         }
 
         _auxPivot = new GameObject {name = "pivot"};
         _ballManager.StateUpdated += UpdateCameraToBall;
-        
     }
 
     private void UpdateCameraToBall(BallState obj)
     {
-        
-        
+        var ballTransform = _ballManager.transform;
         switch (obj)
         {
             case BallState.WasShoot:
-                var ballTransform = _ballManager.transform;
                 _camera.Follow = ballTransform;
                 _camera.LookAt = ballTransform;
                 break;
             case BallState.ToBeCollect:
             {
-                StartCoroutine(UpdatePivot());
+                StartCoroutine(UpdatePivot(ballTransform));
                 _camera.Follow = _auxPivot.transform;
                 _camera.LookAt = _auxPivot.transform;
                 break;
@@ -46,23 +46,30 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    IEnumerator UpdatePivot()
+    IEnumerator UpdatePivot(Transform objectToLook)
     {
-        var ballTransform = _ballManager.transform;
-
         while (true)
         {
             yield return new WaitForSeconds(0f);
-            var position = _lastPlayer.position;
-            _auxPivot.transform.position = (ballTransform.position - position) / 2 + position;
+            var position = actualPlayer.position;
+            _auxPivot.transform.position = (objectToLook.position - position) / 2 + position;
         }
     }
 
-    private void UpdateCameraToCharacter(Transform obj)
+    private void UpdateCameraToCharacter(CharacterStatus obj)
     {
-        StopCoroutine( UpdatePivot());
-        _lastPlayer = obj;
-        _camera.Follow = obj;
-        _camera.LookAt = obj;
+        if (obj.isAI)
+        {
+            StartCoroutine(UpdatePivot(obj.transform));
+            _camera.Follow = _auxPivot.transform;
+            _camera.LookAt = _auxPivot.transform;
+            return;
+        }
+
+        StopCoroutine("UpdatePivot");
+        var objTransform = obj.transform;
+        actualPlayer = objTransform;
+        _camera.Follow = objTransform;
+        _camera.LookAt = objTransform;
     }
 }

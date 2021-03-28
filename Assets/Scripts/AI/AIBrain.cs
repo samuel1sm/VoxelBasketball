@@ -45,12 +45,11 @@ namespace AI
 
         }
 
-        private void IsAttacking(Transform obj)
+        private void IsAttacking(CharacterStatus obj)
         {
             positionToGo = hoop;
         }
-
-   
+        
         
         public override void MovementActivation(ButtonInputTypes types)
         {

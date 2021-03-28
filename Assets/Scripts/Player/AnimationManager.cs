@@ -18,6 +18,7 @@ public class AnimationManager : MonoBehaviour
     private static readonly int FirstAction = Animator.StringToHash("FirstAction");
     private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
     private static readonly int SecondAction = Animator.StringToHash("SecondAction");
+    private static readonly int WasHit = Animator.StringToHash("WasHit");
 
     private void Awake()
     {
@@ -49,6 +50,11 @@ public class AnimationManager : MonoBehaviour
     public void StartSecondAction()
     {
         _animator.SetTrigger(SecondAction);
+    }
+
+    public void LoseTheBall()
+    {
+        _animator.SetTrigger(WasHit);
     }
 
     public void Jump()
