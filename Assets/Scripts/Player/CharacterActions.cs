@@ -48,6 +48,7 @@ public class CharacterActions : MonoBehaviour
 
     private void LostTheBall()
     {
+        _animationManager.UpdateStatus(false);
         _animationManager.LoseTheBall();
     }
 
@@ -110,9 +111,7 @@ public class CharacterActions : MonoBehaviour
                 }
 
                 break;
-
-            case ButtonInputTypes.Performed:
-                break;
+            
 
             case ButtonInputTypes.Canceled:
                 if (_characterStatus.GetHasTheBall())

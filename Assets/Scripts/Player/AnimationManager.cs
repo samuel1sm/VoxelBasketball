@@ -39,7 +39,8 @@ public class AnimationManager : MonoBehaviour
 
     public void UpdateStatus(bool status)
     {
-        _animator.SetBool(IsAttacking, status);
+        _isAttacking = status;
+        _animator.SetBool(IsAttacking, _isAttacking);
     }
     
     public void StartFirstAction()
@@ -54,6 +55,7 @@ public class AnimationManager : MonoBehaviour
 
     public void LoseTheBall()
     {
+
         _animator.SetTrigger(WasHit);
     }
 

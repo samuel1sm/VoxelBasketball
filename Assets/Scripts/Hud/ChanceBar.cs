@@ -13,7 +13,7 @@ public class ChanceBar : MonoBehaviour
     // [SerializeField] private RectTransform marker2;
     [SerializeField] private RectTransform marker;
     [SerializeField] private float makerVelocity;
-    [SerializeField] private float percentageIncrement = 0.1f;
+    [SerializeField] private float percentageIncrement = 0.01f;
     [SerializeField] private float despawnDelay = 0.1f;
     [Range(0f,0.5f),SerializeField] private float endedPercentage;
 

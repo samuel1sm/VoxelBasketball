@@ -13,12 +13,13 @@ public class CharacterStatus : MonoBehaviour
     [SerializeField] public bool isAI;
     [SerializeField] private float attackRadius = 1.5f;
 
+    private static int IdCount = 0;
+    [SerializeField]private bool _hasTheBall;
 
-    private bool _hasTheBall;
-
+    public int CharacterID;
     public bool isTeamOne;
     public event Action<CharacterStatus> OnCatchTheBall = delegate(CharacterStatus f) { };
-
+    
     public event Action OnBallStollen = delegate { };
     public event Action<float> StaminaUpdated = delegate(float f) { };
     public event Action<float> StartChanceMarker = delegate { };
@@ -28,6 +29,8 @@ public class CharacterStatus : MonoBehaviour
 
     private void Awake()
     {
+        CharacterID = IdCount;
+        IdCount++;
         _actualStamina = maxStamina;
     }
 

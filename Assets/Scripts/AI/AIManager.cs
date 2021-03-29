@@ -9,18 +9,20 @@ using UnityEngine.Serialization;
 public class AIManager : MonoBehaviour
 {
     [SerializeField] private AIBrain[] aiBrains;
+    [SerializeField] private Transform hoopPostion;
     private Transform _playerWithBall;
-    private BallManager _manager;
+    private BallManager _ballManager;
 
     private void Awake()
     {
         aiBrains = GetComponentsInChildren<AIBrain>();
-        _manager = BallManager.Instance;
+        _ballManager = BallManager.Instance;
+        _ballManager.OnStateUpdated += HandleBallUpdate;
+
     }
 
     private void Start()
     {
-        _manager.OnStateUpdated += HandleBallUpdate;
     }
 
     private void HandleBallUpdate(Transform obj)
@@ -29,7 +31,7 @@ public class AIManager : MonoBehaviour
         {
             if (aiBrains.Length == 1)
             {
-                aiBrains[0].SetMovement(_manager.transform);
+                aiBrains[0].SetMovement(_ballManager.transform);
                 aiBrains[0].UpdateAIMode(AIMode.Chasing);
             }
 
@@ -41,7 +43,19 @@ public class AIManager : MonoBehaviour
         else if (BallManager.ActualState == BallState.WasCollected)
         {
             var status = obj.GetComponentInParent<CharacterStatus>();
-            if (status.isAI) return;
+            if (status.isAI)
+            {
+                foreach (var ai in aiBrains)
+                {
+                    if (status.CharacterID == ai.GetComponent<CharacterStatus>().CharacterID)
+                    {
+                        ai.SetMovement(hoopPostion);
+                        ai.UpdateAIMode(AIMode.Advancing);
+                    }
+                }
+                return;
+            }
+                
         
             _playerWithBall = obj.transform;
             if (aiBrains.Length == 1)

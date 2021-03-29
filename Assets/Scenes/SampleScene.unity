@@ -277,7 +277,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 77413642}
-  m_LocalRotation: {x: 0.13518532, y: -0.6940641, z: 0.13518532, w: 0.6940641}
+  m_LocalRotation: {x: 0.13518532, y: -0.694064, z: 0.1351853, w: 0.69406414}
   m_LocalPosition: {x: 11.69, y: 6.46, z: 5.529998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1500,7 +1500,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687258581}
-  m_LocalRotation: {x: 0.13518532, y: -0.6940641, z: 0.13518532, w: 0.6940641}
+  m_LocalRotation: {x: 0.13518532, y: -0.694064, z: 0.1351853, w: 0.69406414}
   m_LocalPosition: {x: 11.69, y: 6.46, z: 5.529998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1806,6 +1806,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aiBrains:
   - {fileID: 4402616181617797198}
+  hoopPostion: {fileID: 1602416079}
 --- !u!1 &1915545296
 GameObject:
   m_ObjectHideFlags: 0
@@ -3061,7 +3062,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionToGo: {fileID: 0}
-  hoop: {fileID: 1602416079}
+  actionDelay: 0.2
+  shootRange: 6
 --- !u!65 &4402616181617797199
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3405,4 +3407,6 @@ MonoBehaviour:
     m_Bits: 128
   isAI: 1
   attackRadius: 1.5
+  _hasTheBall: 0
+  CharacterID: 0
   isTeamOne: 1

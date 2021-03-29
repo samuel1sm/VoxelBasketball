@@ -37,6 +37,12 @@ public class BallManager : MonoBehaviour
         _outMapPosition = Vector3.one * -10;
     }
 
+    private void Start()
+    {
+        StateChanged(BallState.ToBeCollect, transform, false);
+
+    }
+
 
     public void StartShoot(Vector3 initialPosition, bool scored)
     {
