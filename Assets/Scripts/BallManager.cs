@@ -61,18 +61,21 @@ public class BallManager : MonoBehaviour
         if (scored)
         {
             transform.DOJump(position, jumpHeight, 1, ballSpeed)
-                .onComplete += () => StateChanged(BallState.ToBeCollect, transform, false);
+                .onComplete += () => StateChanged(BallState.ToBeCollect, transform, false)
+                ;
         }
         else
         {
+
             transform.DOMove(errorPosition.position, ballSpeed)
-                .onComplete += () => StateChanged(BallState.ToBeCollect, transform, false);
+                .onComplete += () => StateChanged(BallState.ToBeCollect, transform, false)
+                ;
         }
 
         transform.DORotate(direction * ballRotation, ballSpeed, RotateMode.LocalAxisAdd);
     }
 
-    private void StateChanged(BallState state, Transform owner, bool isKinematic)
+    public void StateChanged(BallState state, Transform owner, bool isKinematic)
     {
         ActualState = state;
         _rigidbody.isKinematic = isKinematic;

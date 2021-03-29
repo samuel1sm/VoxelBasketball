@@ -8,7 +8,6 @@ using UnityEngine.Serialization;
 
 public class AIManager : MonoBehaviour
 {
-    [SerializeField] private CharacterStatus[] playersStatus;
     [SerializeField] private AIBrain[] aiBrains;
     private Transform _playerWithBall;
     private BallManager _manager;
@@ -30,15 +29,20 @@ public class AIManager : MonoBehaviour
         {
             if (aiBrains.Length == 1)
             {
-                aiBrains[0].SetMovement(_playerWithBall.transform);
+                aiBrains[0].SetMovement(_manager.transform);
                 aiBrains[0].UpdateAIMode(AIMode.Chasing);
+            }
+
+            else
+            {
+                
             }
         }
         else if (BallManager.ActualState == BallState.WasCollected)
         {
-            var status = obj.GetComponentsInParent<CharacterStatus>()[0];
+            var status = obj.GetComponentInParent<CharacterStatus>();
             if (status.isAI) return;
-
+        
             _playerWithBall = obj.transform;
             if (aiBrains.Length == 1)
             {

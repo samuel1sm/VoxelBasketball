@@ -103,7 +103,6 @@ public class CharacterStatus : MonoBehaviour
         Debug.DrawRay(transform.position, transform.up * 2, Color.blue, 2);
         if (size > 1)
         {
-
             for (int i = 0; i < size; i++)
             {
                 // print(results[i].transform.gameObject.name);
@@ -113,6 +112,7 @@ public class CharacterStatus : MonoBehaviour
                 if (status.GetHasTheBall())
                 {
                     TookTheBall();
+                    BallManager.Instance.StateChanged(BallState.WasCollected, transform, true);
                     status.LooseTheBall();
                 }
             }

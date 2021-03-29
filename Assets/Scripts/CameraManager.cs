@@ -7,15 +7,14 @@ using UnityEngine.Serialization;
 
 public class CameraManager : MonoBehaviour
 {
-    [SerializeField] private CharacterStatus[] characters;
     [SerializeField] private Transform actualPlayer;
     private CinemachineVirtualCamera _camera;
     private BallManager _ballManager;
     private GameObject _auxPivot;
+    private Coroutine _pivotCoroutine;
 
     private void Awake()
     {
-        characters = FindObjectsOfType<CharacterStatus>();
         _camera = GetComponent<CinemachineVirtualCamera>();
         _ballManager = BallManager.Instance;
         _auxPivot = new GameObject {name = "pivot"};
@@ -24,36 +23,33 @@ public class CameraManager : MonoBehaviour
 
     private void UpdateCameraToBall(Transform obj)
     {
+        if (_pivotCoroutine != null)
+            StopCoroutine(_pivotCoroutine);
+
         // var ballTransform = _ballManager.transform;
         if (BallManager.ActualState == BallState.WasShoot)
         {
-            print("bola");
-
             _camera.Follow = obj;
             _camera.LookAt = obj;
         }
         else if (BallManager.ActualState == BallState.ToBeCollect)
         {
-            print("pivo");
-
-            StartCoroutine(UpdatePivot(obj));
+            _pivotCoroutine = StartCoroutine(UpdatePivot(obj));
             _camera.Follow = _auxPivot.transform;
             _camera.LookAt = _auxPivot.transform;
         }
         else
         {
             var a = obj.GetComponent<CharacterStatus>();
+
             if (a.isAI)
             {
-                print($"{a.gameObject.name}");
-                StartCoroutine(UpdatePivot(obj));
+                _pivotCoroutine = StartCoroutine(UpdatePivot(obj));
                 _camera.Follow = _auxPivot.transform;
                 _camera.LookAt = _auxPivot.transform;
             }
             else
             {
-                print("player");
-
                 _camera.Follow = obj;
                 _camera.LookAt = obj;
             }

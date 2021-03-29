@@ -332,7 +332,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 332dcaa1d830576438dd4563fb043a83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characters: []
   actualPlayer: {fileID: 4402616180779996122}
 --- !u!224 &140905158 stripped
 RectTransform:
@@ -1805,9 +1804,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18606ec7fd79fa540aa9028802f1e799, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playersStatus:
-  - {fileID: 2112057433}
-  aiBrains: []
+  aiBrains:
+  - {fileID: 4402616181617797198}
 --- !u!1 &1915545296
 GameObject:
   m_ObjectHideFlags: 0
