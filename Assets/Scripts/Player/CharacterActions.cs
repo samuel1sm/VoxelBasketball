@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Utils;
 using Random = UnityEngine.Random;
 
@@ -14,18 +15,20 @@ public class CharacterActions : MonoBehaviour
     [SerializeField] private float normalShootStaminaLost = 20f;
     [SerializeField] private Transform initialBallPosition;
     [SerializeField] private Transform hoopPosition;
-    private CharacterStatus _characterStatus;
 
+
+    private CharacterStatus _characterStatus;
     private CharacterControls _characterControls;
     private AnimationManager _animationManager;
+    private CharacterShootHandler _characterShootHandler;
     private float chanceResult;
-    private bool hasAttacked = false;
 
     private void Awake()
     {
         _characterControls = GetComponent<CharacterControls>();
         _animationManager = GetComponent<AnimationManager>();
         _characterStatus = GetComponent<CharacterStatus>();
+        _characterShootHandler = GetComponent<CharacterShootHandler>();
         // _hitMask = LayerMask.NameToLayer("Characters"); 
     }
 
@@ -61,8 +64,6 @@ public class CharacterActions : MonoBehaviour
                 _characterControls.MovementActivation(ButtonInputTypes.Canceled);
                 break;
             case AnimationTypes.Charge:
-                hasAttacked = !hasAttacked;
-
                 _characterControls.MovementActivation(ButtonInputTypes.Canceled);
                 break;
             case AnimationTypes.Shoot:
@@ -82,13 +83,12 @@ public class CharacterActions : MonoBehaviour
         {
             //todo passe
         }
-        else
+        else if (!_characterStatus.GetHasDash())
         {
 
-            hasAttacked = !hasAttacked;
             _characterControls.MovementActivation(obj);
-
             _animationManager.StartSecondAction();
+            _characterStatus.UpdateHasCharged();
         }
     }
 
@@ -103,7 +103,7 @@ public class CharacterActions : MonoBehaviour
                 if (_characterStatus.GetHasTheBall())
                 {
                     _animationManager.LookAt(hoopPosition.position, AxisConstraint.Y);
-                    _characterStatus.StartChanceBar();
+                    _characterShootHandler.StartChanceBar();
                 }
                 else
                 {
@@ -111,14 +111,15 @@ public class CharacterActions : MonoBehaviour
                 }
 
                 break;
-            
+
 
             case ButtonInputTypes.Canceled:
                 if (_characterStatus.GetHasTheBall())
                 {
                     var hoopDistance = CalculateDistancePlayerToHoop();
 
-                    chanceResult = _characterStatus.StopChanceBar(hoopDistance);
+                    var perc = hoopDistance * _characterStatus.GetStaminaPercentage();
+                    chanceResult = _characterShootHandler.StopChanceBar(perc);
                     _animationManager.StartShootBallAnimation();
 
                     _characterStatus.UpdateStamina(-normalShootStaminaLost * CalculateDistancePlayerToHoop());
@@ -143,7 +144,9 @@ public class CharacterActions : MonoBehaviour
     {
         yield return new WaitForSeconds(0.4f);
 
-        _characterStatus.UpdateIsAttacking();
+        _characterStatus.UpdateHasTheBall();
         _animationManager.UpdateStatus(false);
     }
+
+
 }

@@ -62,8 +62,7 @@ namespace AI
         private void HandleDefence()
         {
             // print($"{positionToGo.position} {positionToGo.gameObject.name}");
-            if (DistanceToTarget() <=
-                _navMesh.stoppingDistance)
+            if (DistanceToTarget() <= _navMesh.stoppingDistance && !_characterStatus.GetHasDash())
             {
                 // transform.LookAt(positionToGo.position);
                 transform.DOLookAt(positionToGo.position, 0.2F, AxisConstraint.Y);
@@ -74,13 +73,17 @@ namespace AI
 
         public override void MovementActivation(ButtonInputTypes types)
         {
-            // if (types == ButtonInputTypes.Started)
-            // {
-            //     _previousPosition = positionToGo;
-            //     positionToGo = transform;
-            // }
-            // else
-            //     positionToGo = _previousPosition;
+            if (types == ButtonInputTypes.Started)
+            {
+                _previousPosition = positionToGo;
+                positionToGo = transform;
+                
+            }
+            else
+            {
+                positionToGo = _previousPosition;
+            }
+            
         }
 
         public void SetMovement(Transform position)
@@ -98,13 +101,13 @@ namespace AI
         {
             while (true)
             {
+                print(_aiMode);
                 switch (_aiMode)
                 {
                     case AIMode.Advancing:
-                        HandleAttack();
+                        HandleShooting();
                         break;
                     case AIMode.Defending:
-                        yield return new WaitForSeconds(actionDelay);
                         HandleDefence();
                         break;
                     case AIMode.Chasing:
@@ -115,7 +118,7 @@ namespace AI
                         break;
                 }
 
-                yield return new WaitForSeconds(0f);
+                yield return new WaitForSeconds(actionDelay);
             }
         }
 
@@ -124,7 +127,7 @@ namespace AI
             return Vector3.Distance(positionToGo.position, transform.position);
         }
 
-        private void HandleAttack()
+        private void HandleShooting()
         {
             if (shootRange >= DistanceToTarget() && !_shooted)
             {
@@ -140,7 +143,6 @@ namespace AI
             var value = Random.Range(0f, 0.5f);
             yield return new WaitForSeconds(value);
             OnFirstActionPressed(ButtonInputTypes.Canceled);
-            UpdateAIMode(AIMode.Defending);
             // SetMovement(BallManager.Instance.transform);
             _shooted = false;
         }

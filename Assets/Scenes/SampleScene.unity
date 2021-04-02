@@ -277,7 +277,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 77413642}
-  m_LocalRotation: {x: 0.13518532, y: -0.694064, z: 0.1351853, w: 0.69406414}
+  m_LocalRotation: {x: 0.13518532, y: -0.6940641, z: 0.13518532, w: 0.6940641}
   m_LocalPosition: {x: 11.69, y: 6.46, z: 5.529998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1500,7 +1500,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687258581}
-  m_LocalRotation: {x: 0.13518532, y: -0.694064, z: 0.1351853, w: 0.69406414}
+  m_LocalRotation: {x: 0.13518532, y: -0.6940641, z: 0.13518532, w: 0.6940641}
   m_LocalPosition: {x: 11.69, y: 6.46, z: 5.529998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -3002,6 +3002,7 @@ GameObject:
   - component: {fileID: 1919974303}
   - component: {fileID: 4717606338564966768}
   - component: {fileID: 4402616181617797198}
+  - component: {fileID: 4402616181617797200}
   - component: {fileID: 4402616181617797197}
   - component: {fileID: 4402616181617797199}
   m_Layer: 7
@@ -3062,7 +3063,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionToGo: {fileID: 0}
-  actionDelay: 0.2
+  actionDelay: 0.3
   shootRange: 6
 --- !u!65 &4402616181617797199
 BoxCollider:
@@ -3077,6 +3078,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4402616181617797200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4402616181617797195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f520d28cf52ab41429e8c7a9756850ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  successChance: 100
 --- !u!23 &4402616181624252760
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3398,15 +3412,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2580487c12656894db6aaf6f5a67e9f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isAI: 1
+  CharacterID: 0
+  isTeamOne: 1
   staminaRegenerationCountdown: 0.1
   passiveStaminaRegeneration: 0.2
   maxStamina: 100
-  successChance: 0
+  _hasTheBall: 0
   _hitMask:
     serializedVersion: 2
-    m_Bits: 128
-  isAI: 1
-  attackRadius: 1.5
-  _hasTheBall: 0
-  CharacterID: 0
-  isTeamOne: 1
+    m_Bits: 0
+  dashRadius: 1.5
+  hasDashed: 0
+  dashDelay: 0.9

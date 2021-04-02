@@ -24,7 +24,7 @@ public class ChanceBar : MonoBehaviour
     {
         _radius = Math.Abs(marker.transform.localPosition.x);
 
-        foreach (var status in FindObjectsOfType<CharacterStatus>())
+        foreach (var status in FindObjectsOfType<CharacterShootHandler>())
         {
             status.StartChanceMarker += StartChanceMovingMarker;
             status.StopChanceMarker += StopMovingMarker;

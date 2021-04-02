@@ -190,12 +190,13 @@ GameObject:
   - component: {fileID: 965554247}
   - component: {fileID: 5984898331868178774}
   - component: {fileID: 1503540721645879075}
+  - component: {fileID: 1976960630}
   - component: {fileID: 965554248}
   - component: {fileID: 7935947658652504187}
+  - component: {fileID: 7656403771398963016}
   - component: {fileID: 965554249}
   - component: {fileID: 965554251}
   - component: {fileID: 4717606337682768548}
-  - component: {fileID: 1976960630}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -271,6 +272,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!208 &1976960630
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4402616180620813215}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!114 &965554248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,16 +315,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2580487c12656894db6aaf6f5a67e9f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isAI: 0
+  CharacterID: 0
+  isTeamOne: 0
   staminaRegenerationCountdown: 0.1
   passiveStaminaRegeneration: 0.2
   maxStamina: 100
-  successChance: 0
+  _hasTheBall: 0
   _hitMask:
     serializedVersion: 2
     m_Bits: 128
-  isAI: 0
-  attackRadius: 1.5
-  isTeamOne: 0
+  dashRadius: 1.5
+  hasDashed: 0
+  dashDelay: 0.9
+--- !u!114 &7656403771398963016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4402616180620813215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f520d28cf52ab41429e8c7a9756850ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  successChance: 100
 --- !u!114 &965554249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -347,22 +380,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7b1ba1cefdd98c469ad71c0209132cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!208 &1976960630
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4402616180620813215}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &4402616180669725139
 GameObject:
   m_ObjectHideFlags: 0

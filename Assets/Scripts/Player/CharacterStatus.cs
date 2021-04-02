@@ -2,28 +2,31 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CharacterStatus : MonoBehaviour
 {
-    [SerializeField] private float staminaRegenerationCountdown = 0.8f;
-    [SerializeField] private float passiveStaminaRegeneration = 2f;
-    [SerializeField] private float maxStamina = 100f;
-    [SerializeField] private float successChance = 100f;
-    [SerializeField] private LayerMask _hitMask;
-    [SerializeField] public bool isAI;
-    [SerializeField] private float attackRadius = 1.5f;
-
-    private static int IdCount = 0;
-    [SerializeField]private bool _hasTheBall;
-
+    [Header("Geral")] [SerializeField] public bool isAI;
     public int CharacterID;
     public bool isTeamOne;
+
+    [Header("Stamina")] [SerializeField] private float staminaRegenerationCountdown = 0.8f;
+    [SerializeField] private float passiveStaminaRegeneration = 2f;
+    [SerializeField] private float maxStamina = 100f;
+
+    [Header("Dash")] [SerializeField] private bool _hasTheBall;
+    [SerializeField] private LayerMask _hitMask;
+    [SerializeField] private float dashRadius = 1.5f;
+    [SerializeField] private bool hasDashed = false;
+    [SerializeField] private float dashDelay = 0.9f;
+
+    private static int IdCount = 0;
     public event Action<CharacterStatus> OnCatchTheBall = delegate(CharacterStatus f) { };
-    
+
+    public event Action<bool> OnDashStatus = delegate(bool b) { };
     public event Action OnBallStollen = delegate { };
     public event Action<float> StaminaUpdated = delegate(float f) { };
-    public event Action<float> StartChanceMarker = delegate { };
-    public event Func<float, float> StopChanceMarker;
+
 
     private float _actualStamina;
 
@@ -39,25 +42,43 @@ public class CharacterStatus : MonoBehaviour
         StartCoroutine(StaminaRegen());
     }
 
-    private float CalculateChanceOfSuccess()
+    #region dash
+
+    public bool GetHasDash()
     {
-        return successChance;
+        return hasDashed;
     }
 
-    public void StartChanceBar()
+    public void UpdateHasCharged()
     {
-        StartChanceMarker(CalculateChanceOfSuccess());
+        hasDashed = true;
+        OnDashStatus(true);
+        StartCoroutine(ReloadDash());
     }
 
-    public float StopChanceBar(float hoopDistance)
+    IEnumerator ReloadDash()
     {
-        var extraValues = hoopDistance * _actualStamina / maxStamina;
-        var result = StopChanceMarker(extraValues);
-        // print(result);
-        return result;
+        var delay = dashDelay;
+        while (delay > 0)
+        {
+            yield return new WaitForSeconds(0.01f);
+            delay -= 0.01f;
+        }
+
+        hasDashed = false;
+        OnDashStatus(hasDashed);
     }
 
+    #endregion
 
+
+    #region Stamina
+
+    public float GetStaminaPercentage()
+    {
+        return _actualStamina / maxStamina;
+    }
+    
     public void UpdateStamina(float value)
     {
         _actualStamina += value;
@@ -66,7 +87,7 @@ public class CharacterStatus : MonoBehaviour
         StaminaUpdated(_actualStamina / maxStamina);
     }
 
-    IEnumerator StaminaRegen()
+    private IEnumerator StaminaRegen()
     {
         while (true)
         {
@@ -75,16 +96,15 @@ public class CharacterStatus : MonoBehaviour
         }
     }
 
-    public bool GetHasTheBall()
-    {
-        return _hasTheBall;
-    }
+    #endregion
 
-    public void UpdateIsAttacking()
+
+    #region Ball
+
+    public void UpdateHasTheBall()
     {
         _hasTheBall = !_hasTheBall;
     }
-
 
     public void TookTheBall()
     {
@@ -98,10 +118,17 @@ public class CharacterStatus : MonoBehaviour
         OnBallStollen();
     }
 
-    public void CastAttack()
+    public bool GetHasTheBall()
+    {
+        return _hasTheBall;
+    }
+
+    #endregion
+
+    public void CastDash()
     {
         RaycastHit[] results = new RaycastHit[4];
-        var size = Physics.SphereCastNonAlloc(transform.position, attackRadius, transform.forward,
+        var size = Physics.SphereCastNonAlloc(transform.position, dashRadius, transform.forward,
             results, 0, _hitMask);
         Debug.DrawRay(transform.position, transform.up * 2, Color.blue, 2);
         if (size > 1)
@@ -133,6 +160,6 @@ public class CharacterStatus : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRadius);
+        Gizmos.DrawWireSphere(transform.position, dashRadius);
     }
 }
