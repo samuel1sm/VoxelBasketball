@@ -10,11 +10,7 @@ public class CharacterShootHandler : MonoBehaviour
     public event Func<float, float> StopChanceMarker;
     [SerializeField] private float successChance = 100f;
 
-
-
-    private void Awake()
-    {
-    }
+    
 
     private float CalculateChanceOfSuccess()
     {
@@ -33,7 +29,4 @@ public class CharacterShootHandler : MonoBehaviour
         // print(result);
         return result;
     }
-
-    
-
 }

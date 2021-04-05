@@ -10,11 +10,13 @@ public class AIMovement : GenericMovement
     [SerializeField] private float distanceToTarget = 2f;
     private NavMeshAgent _navMeshAgent;
     private AIBrain _aiBrain;
-    private void Awake()
+
+    protected override void Awake()
     {
+        base.Awake();
+
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _aiBrain = GetComponent<AIBrain>();
-        characterStatus = GetComponent<CharacterStatus>();
         distanceToTarget = _navMeshAgent.stoppingDistance;
         characterSpeed = _navMeshAgent.speed;
         _navMeshAgent.stoppingDistance = 0;
@@ -37,22 +39,29 @@ public class AIMovement : GenericMovement
                 break;
             case AIMode.Lurking:
                 break;
- 
         }
+    }
+
+    protected override void MovementActivation(MovimentStatus rule)
+    {
+        _navMeshAgent.speed = rule switch
+        {
+            MovimentStatus.Stop => 0,
+            MovimentStatus.Normal => characterSpeed,
+            MovimentStatus.Slow => characterSpeed * speedDecrease,
+        };
     }
 
 
     private void FixedUpdate()
     {
         var position = _aiBrain.GetMovement();
-        
+
         if (position.magnitude == 0) return;
-        
-        
-        
+
+
         Move(position);
         LoseStamina();
-
     }
 
     protected override void Move(Vector3 position)

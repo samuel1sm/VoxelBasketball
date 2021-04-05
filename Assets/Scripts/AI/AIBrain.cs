@@ -24,6 +24,7 @@ namespace AI
         [SerializeField] private Transform positionToGo;
         [SerializeField] private float actionDelay;
         [SerializeField] private float shootRange = 6;
+        [SerializeField] private float speed;
 
         private Transform _previousPosition;
         private CharacterStatus _characterStatus;
@@ -52,11 +53,10 @@ namespace AI
             _aiMode = aiMode;
             OnModeUpdated(_aiMode);
         }
-        
+
 
         private void Update()
         {
-          
         }
 
         private void HandleDefence()
@@ -70,21 +70,6 @@ namespace AI
             }
         }
 
-
-        public override void MovementActivation(ButtonInputTypes types)
-        {
-            if (types == ButtonInputTypes.Started)
-            {
-                _previousPosition = positionToGo;
-                positionToGo = transform;
-                
-            }
-            else
-            {
-                positionToGo = _previousPosition;
-            }
-            
-        }
 
         public void SetMovement(Transform position)
         {
@@ -101,7 +86,7 @@ namespace AI
         {
             while (true)
             {
-                print(_aiMode);
+                // print(_aiMode);
                 switch (_aiMode)
                 {
                     case AIMode.Advancing:
@@ -139,7 +124,6 @@ namespace AI
 
         IEnumerator ShootRelease()
         {
-
             var value = Random.Range(0f, 0.5f);
             yield return new WaitForSeconds(value);
             OnFirstActionPressed(ButtonInputTypes.Canceled);

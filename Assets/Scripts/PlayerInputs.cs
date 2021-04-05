@@ -41,6 +41,14 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Reset"",
+                    ""type"": ""Button"",
+                    ""id"": ""86ea37df-01e5-4e65-b5e6-9575cdb16fce"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -120,6 +128,17 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                     ""action"": ""SecondAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b99b9fef-4d53-4a9c-a71b-a4a93daceb72"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reset"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -131,6 +150,7 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
         m_Actions_Movement = m_Actions.FindAction("Movement", throwIfNotFound: true);
         m_Actions_FirstAction = m_Actions.FindAction("FirstAction", throwIfNotFound: true);
         m_Actions_SecondAction = m_Actions.FindAction("SecondAction", throwIfNotFound: true);
+        m_Actions_Reset = m_Actions.FindAction("Reset", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -183,6 +203,7 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
     private readonly InputAction m_Actions_Movement;
     private readonly InputAction m_Actions_FirstAction;
     private readonly InputAction m_Actions_SecondAction;
+    private readonly InputAction m_Actions_Reset;
     public struct ActionsActions
     {
         private @PlayerInputs m_Wrapper;
@@ -190,6 +211,7 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
         public InputAction @Movement => m_Wrapper.m_Actions_Movement;
         public InputAction @FirstAction => m_Wrapper.m_Actions_FirstAction;
         public InputAction @SecondAction => m_Wrapper.m_Actions_SecondAction;
+        public InputAction @Reset => m_Wrapper.m_Actions_Reset;
         public InputActionMap Get() { return m_Wrapper.m_Actions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -208,6 +230,9 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                 @SecondAction.started -= m_Wrapper.m_ActionsActionsCallbackInterface.OnSecondAction;
                 @SecondAction.performed -= m_Wrapper.m_ActionsActionsCallbackInterface.OnSecondAction;
                 @SecondAction.canceled -= m_Wrapper.m_ActionsActionsCallbackInterface.OnSecondAction;
+                @Reset.started -= m_Wrapper.m_ActionsActionsCallbackInterface.OnReset;
+                @Reset.performed -= m_Wrapper.m_ActionsActionsCallbackInterface.OnReset;
+                @Reset.canceled -= m_Wrapper.m_ActionsActionsCallbackInterface.OnReset;
             }
             m_Wrapper.m_ActionsActionsCallbackInterface = instance;
             if (instance != null)
@@ -221,6 +246,9 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                 @SecondAction.started += instance.OnSecondAction;
                 @SecondAction.performed += instance.OnSecondAction;
                 @SecondAction.canceled += instance.OnSecondAction;
+                @Reset.started += instance.OnReset;
+                @Reset.performed += instance.OnReset;
+                @Reset.canceled += instance.OnReset;
             }
         }
     }
@@ -230,5 +258,6 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnFirstAction(InputAction.CallbackContext context);
         void OnSecondAction(InputAction.CallbackContext context);
+        void OnReset(InputAction.CallbackContext context);
     }
 }

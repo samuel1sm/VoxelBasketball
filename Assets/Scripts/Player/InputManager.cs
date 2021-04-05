@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Utils;
 
 
@@ -6,7 +7,6 @@ public class InputManager : CharacterControls
 {
     private PlayerInputs _playerInput;
 
-    private bool IsAttacking = false;
     
     private void Awake()
     {
@@ -18,18 +18,14 @@ public class InputManager : CharacterControls
         _playerInput.Actions.FirstAction.started += _ => OnFirstActionPressed(ButtonInputTypes.Started);
         _playerInput.Actions.FirstAction.performed += _ => OnFirstActionPressed(ButtonInputTypes.Performed);
         _playerInput.Actions.FirstAction.canceled += _ => OnFirstActionPressed(ButtonInputTypes.Canceled);
-
+        _playerInput.Actions.Reset.started += _ => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        
         _playerInput.Actions.SecondAction.started += _ => OnSecondActionPressed(ButtonInputTypes.Started);
         _playerInput.Actions.SecondAction.performed += _ => OnSecondActionPressed(ButtonInputTypes.Performed);
         _playerInput.Actions.SecondAction.canceled += _ => OnSecondActionPressed(ButtonInputTypes.Canceled);
 
     }
-
-    public override void MovementActivation(ButtonInputTypes types)
-    {
-        IsAttacking = types == ButtonInputTypes.Started;
-    }
-
+    
     private void OnEnable()
     {
         _playerInput.Enable();
@@ -42,9 +38,7 @@ public class InputManager : CharacterControls
 
     public override Vector3 GetMovement()
     {
-        if (IsAttacking)
-            return Vector3.zero;
-        
+
         return Vector22Vector3(_playerInput.Actions.Movement.ReadValue<Vector2>());
     }
 

@@ -11,12 +11,24 @@ namespace Utils
         [SerializeField] protected float stamina2Lose = 1f;
         [SerializeField] protected float characterSpeed;
         [SerializeField] protected float turnSmoothTime;
+        [SerializeField] protected float speedDecrease = 0.5f;
+        
+        
         protected CharacterStatus characterStatus;
+
+        protected virtual void Awake()
+        {
+            characterStatus = GetComponent<CharacterStatus>();
+            characterStatus.OnMovimentStatusChanged += MovementActivation;
+        }
 
         protected virtual void LoseStamina()
         {
             characterStatus.UpdateStamina(-stamina2Lose);
         }
+
+        protected abstract void MovementActivation(MovimentStatus rule);
+
         
         protected abstract void Move(Vector3 position);
     }

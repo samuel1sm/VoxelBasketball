@@ -15,7 +15,7 @@ namespace Utils
         public event Action<ButtonInputTypes> FirstActionPressed;
         public event Action<ButtonInputTypes> SecondActionPressed;
 
-        public abstract void MovementActivation(ButtonInputTypes types);
+        
 
         protected virtual void OnFirstActionPressed(ButtonInputTypes obj)
         {

@@ -11,8 +11,8 @@ public enum AnimationTypes{
 public class AnimationManager : MonoBehaviour
 {
     // Start is called before the first frame update
-    public event Action<AnimationTypes> OnAnimationEnd = delegate {  };
-    private bool _isAttacking;
+    // public event Action<AnimationTypes> OnAnimationEnd = delegate {  };
+    private bool _hasTheBall;
     private Animator _animator;
     private static readonly int ShootTag = Animator.StringToHash("Shoot");
     private static readonly int FirstAction = Animator.StringToHash("FirstAction");
@@ -37,10 +37,16 @@ public class AnimationManager : MonoBehaviour
     }
         
 
-    public void UpdateStatus(bool status)
+    public void UpdateStatusMode(bool status)
     {
-        _isAttacking = status;
-        _animator.SetBool(IsAttacking, _isAttacking);
+        _hasTheBall = status;
+        _animator.SetBool(IsAttacking, _hasTheBall);
+    }
+
+    public void SetWasHit()
+    {
+        _animator.SetTrigger(WasHit);
+
     }
     
     public void StartFirstAction()
@@ -53,34 +59,32 @@ public class AnimationManager : MonoBehaviour
         _animator.SetTrigger(SecondAction);
     }
 
-    public void LoseTheBall()
-    {
 
-        _animator.SetTrigger(WasHit);
-    }
 
     public void Jump()
     {
         var originalPosition = transform.position;
 
         DOTween.Sequence()
-            .Append(transform.DOMove((originalPosition + transform.up), 0.3f).SetEase(Ease.Linear))
-            .Append(transform.DOMove(originalPosition, 0.3f)).SetEase(Ease.Linear)
-            .onComplete += () => OnAnimationEnd(AnimationTypes.Jump);
+            .Append(transform.DOMove((originalPosition + transform.up), 0.15f).SetEase(Ease.Linear))
+            .Append(transform.DOMove(originalPosition, 0.15f)).SetEase(Ease.Linear)
+            // .onComplete += () => OnAnimationEnd(AnimationTypes.Jump);
+        ;
     }
 
     public void Charge()
     {
         var originalPosition = transform.position;
         DOTween.Sequence()
-            .Append(transform.DOMove(transform.position + transform.forward * 3, 0.18f).SetEase(Ease.Linear))
-            .Append(transform.DOMove(originalPosition, 0.3f).SetEase(Ease.InQuint))
-            .onComplete += () => OnAnimationEnd(AnimationTypes.Charge);
+            .Append(transform.DOMove(transform.position + transform.forward * 3, 0.20f).SetEase(Ease.Linear))
+            .Append(transform.DOMove(originalPosition, 0.15f).SetEase(Ease.InQuint))
+            // .onComplete += () => OnAnimationEnd(AnimationTypes.Charge);
+        ;
     }
 
-    public void Shoot()
-    {
-        OnAnimationEnd(AnimationTypes.Shoot);
-    }
+    // public void Shoot()
+    // {
+    //     OnAnimationEnd(AnimationTypes.Shoot);
+    // }
     
 }

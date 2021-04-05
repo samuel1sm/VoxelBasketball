@@ -277,7 +277,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 77413642}
-  m_LocalRotation: {x: 0.13518532, y: -0.6940641, z: 0.13518532, w: 0.6940641}
+  m_LocalRotation: {x: 0.13518532, y: -0.694064, z: 0.1351853, w: 0.69406414}
   m_LocalPosition: {x: 11.69, y: 6.46, z: 5.529998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1500,7 +1500,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687258581}
-  m_LocalRotation: {x: 0.13518532, y: -0.6940641, z: 0.13518532, w: 0.6940641}
+  m_LocalRotation: {x: 0.13518532, y: -0.694064, z: 0.1351853, w: 0.69406414}
   m_LocalPosition: {x: 11.69, y: 6.46, z: 5.529998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1776,7 +1776,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1887548703
 Transform:
   m_ObjectHideFlags: 0
@@ -2509,11 +2509,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3971606594011246507, guid: 291a8e553bbd63649adb7ee717283e24, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.22
+      value: 8.94
       objectReference: {fileID: 0}
     - target: {fileID: 3971606594011246507, guid: 291a8e553bbd63649adb7ee717283e24, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -7.31
+      value: -5.19
       objectReference: {fileID: 0}
     - target: {fileID: 3971606594011246507, guid: 291a8e553bbd63649adb7ee717283e24, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3049,6 +3049,7 @@ MonoBehaviour:
   stamina2Lose: 1
   characterSpeed: 6
   turnSmoothTime: 0
+  speedDecrease: 0.5
   distanceToTarget: 2
 --- !u!114 &4402616181617797198
 MonoBehaviour:
@@ -3065,6 +3066,7 @@ MonoBehaviour:
   positionToGo: {fileID: 0}
   actionDelay: 0.3
   shootRange: 6
+  speed: 0
 --- !u!65 &4402616181617797199
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3415,13 +3417,14 @@ MonoBehaviour:
   isAI: 1
   CharacterID: 0
   isTeamOne: 1
+  catchBallDelay: 0.4
   staminaRegenerationCountdown: 0.1
   passiveStaminaRegeneration: 0.2
   maxStamina: 100
   _hasTheBall: 0
   _hitMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   dashRadius: 1.5
   hasDashed: 0
   dashDelay: 0.9
