@@ -68,6 +68,7 @@ public class ChanceBar : MonoBehaviour
 
     public float StopMovingMarker(float extraValues)
     {
+        if (_coroutine == null) return 0;
         StartCoroutine(DeactivateBar());
         StopCoroutine(_coroutine);
         var percentageDistance = Mathf.Abs(endedPercentage - _centerPercentage) * 2; 

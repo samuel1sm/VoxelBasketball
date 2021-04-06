@@ -11,15 +11,18 @@ public class StaminaBar : MonoBehaviour
     [SerializeField] private Image fill;
     
     private Slider _slider;
-    
+    private Camera _camera;
+
     private void Awake()
     {
         _slider = GetComponent<Slider>();
         _slider.value = 1;
+        characterStatus = GetComponentInParent<CharacterStatus>();
     }
 
     void Start()
     {
+        _camera = Camera.main;
         characterStatus.StaminaUpdated += UpdateStaminaBar;
     }
 
@@ -33,5 +36,11 @@ public class StaminaBar : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void LateUpdate()
+    {
+        transform.LookAt(_camera.transform);
+        transform.Rotate(0,180,0);
     }
 }
