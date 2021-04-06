@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public enum MovimentStatus
+public enum MovementStatus
 {
     Stop, Normal, Slow
 }
@@ -27,10 +27,10 @@ public class CharacterStatus : MonoBehaviour
     [SerializeField] private bool hasDashed = false;
     [SerializeField] private float dashDelay = 0.9f;
 
-    private MovimentStatus _movimentStatus = MovimentStatus.Normal;
+    private MovementStatus _movementStatus = MovementStatus.Normal;
     private static int IdCount = 0;
     public event Action<CharacterStatus> OnCatchTheBall = delegate(CharacterStatus f) { };
-    public event Action<MovimentStatus> OnMovimentStatusChanged = delegate(MovimentStatus status) { };
+    public event Action<MovementStatus> OnMovementStatusChanged = delegate(MovementStatus status) { };
     public event Action<bool> OnDashStatus = delegate(bool b) { };
     public event Action OnLostBall = delegate { };
     public event Action<float> StaminaUpdated = delegate(float f) { };
@@ -160,11 +160,11 @@ public class CharacterStatus : MonoBehaviour
 
     #endregion
 
-    public void UpdateMovementStatus(MovimentStatus movimentStatus)
+    public void UpdateMovementStatus(MovementStatus movementStatus)
     {
         // print(movimentStatus);
-        _movimentStatus = movimentStatus;
-        OnMovimentStatusChanged(_movimentStatus);
+        _movementStatus = movementStatus;
+        OnMovementStatusChanged(_movementStatus);
     }
 
     private void OnTriggerEnter(Collider other)

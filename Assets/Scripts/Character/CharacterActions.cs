@@ -54,6 +54,9 @@ public class CharacterActions : MonoBehaviour
     {
         ChangeToDefence();
         _animationManager.SetWasHit();
+        _characterShootHandler.CancelBar();
+        _characterStatus.UpdateMovementStatus(MovementStatus.Normal);
+
     }
 
     public void Shoot()
@@ -105,7 +108,7 @@ public class CharacterActions : MonoBehaviour
                     // if (hasShoot) return;
 
                     _animationManager.LookAt(hoopPosition.position, AxisConstraint.Y);
-                    _characterStatus.UpdateMovementStatus(MovimentStatus.Stop);
+                    _characterStatus.UpdateMovementStatus(MovementStatus.Stop);
                     _characterShootHandler.StartChanceBar();
                 }
                 else

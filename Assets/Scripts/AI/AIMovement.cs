@@ -42,13 +42,13 @@ public class AIMovement : GenericMovement
         }
     }
 
-    protected override void MovementActivation(MovimentStatus rule)
+    protected override void MovementActivation(MovementStatus rule)
     {
         _navMeshAgent.speed = rule switch
         {
-            MovimentStatus.Stop => 0,
-            MovimentStatus.Normal => characterSpeed,
-            MovimentStatus.Slow => characterSpeed * speedDecrease,
+            MovementStatus.Stop => 0,
+            MovementStatus.Normal => characterSpeed,
+            MovementStatus.Slow => characterSpeed * speedDecrease,
         };
     }
 

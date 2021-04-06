@@ -19,7 +19,7 @@ namespace Utils
         protected virtual void Awake()
         {
             characterStatus = GetComponent<CharacterStatus>();
-            characterStatus.OnMovimentStatusChanged += MovementActivation;
+            characterStatus.OnMovementStatusChanged += MovementActivation;
         }
 
         protected virtual void LoseStamina()
@@ -27,7 +27,7 @@ namespace Utils
             characterStatus.UpdateStamina(-stamina2Lose);
         }
 
-        protected abstract void MovementActivation(MovimentStatus rule);
+        protected abstract void MovementActivation(MovementStatus rule);
 
         
         protected abstract void Move(Vector3 position);

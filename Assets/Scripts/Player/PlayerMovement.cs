@@ -59,13 +59,13 @@ public class PlayerMovement : GenericMovement
     }
 
 
-    protected override void MovementActivation(MovimentStatus rule)
+    protected override void MovementActivation(MovementStatus rule)
     {
         _speedPercentage = rule switch
         {
-            MovimentStatus.Normal => 1,
-            MovimentStatus.Slow => speedDecrease,
-            MovimentStatus.Stop => 0,
+            MovementStatus.Normal => 1,
+            MovementStatus.Slow => speedDecrease,
+            MovementStatus.Stop => 0,
         };
     }
 
